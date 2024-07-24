@@ -44,9 +44,14 @@
       width: '640',
       videoId: 'SwqNoPPCGPY', // 재생할 유튜브 영상 ID
       events: {
+        'onReady': onPlayerReady,
         'onStateChange': onPlayerStateChange
       }
     });
+  }
+
+  function onPlayerReady(event) {
+    document.getElementById('messageBox').style.display = 'none';
   }
 
   function onPlayerStateChange(event) {
