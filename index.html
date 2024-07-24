@@ -5,6 +5,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>YouTube Video End Message</title>
   <style>
+    #playerContainer {
+      position: relative;
+      width: 640px;
+      height: 390px;
+      margin: auto;
+      cursor: pointer;
+    }
+    #thumbnail {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('https://i.ytimg.com/vi/Ozy7eXm94Uc/mqdefault.jpg') no-repeat center center;
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1;
+    }
+    #playButton {
+      width: 100px;
+      height: 100px;
+      background: url('https://e7.pngegg.com/pngimages/566/248/png-clipart-computer-icons-youtube-play-button-button-angle-text-thumbnail.png') no-repeat center center;
+      background-size: contain;
+      z-index: 2;
+    }
     #messageBox {
       display: none;
       position: absolute;
@@ -18,31 +45,29 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      z-index: 1000; /* ensure it appears above everything else */
-    }
-    #playerContainer {
-      position: relative;
-      width: 640px;
-      height: 390px;
-      margin: auto;
+      z-index: 1000;
     }
   </style>
 </head>
 <body>
 
-<div id="playerContainer">
+<div id="playerContainer" onclick="startVideo()">
   <div id="player"></div>
+  <div id="thumbnail">
+    <div id="playButton"></div>
+  </div>
   <div id="messageBox" onclick="hideMessageBox()">Video has ended! Click to close this message.</div>
 </div>
 
 <script src="https://www.youtube.com/iframe_api"></script>
 <script>
   var player;
+
   function onYouTubeIframeAPIReady() {
     player = new YT.Player('player', {
       height: '390',
       width: '640',
-      videoId: 'SwqNoPPCGPY', // 재생할 유튜브 영상 ID
+      videoId: 'SwqNoPPCGPY',
       events: {
         'onReady': onPlayerReady,
         'onStateChange': onPlayerStateChange
@@ -62,9 +87,14 @@
     }
   }
 
+  function startVideo() {
+    document.getElementById('thumbnail').style.display = 'none';
+    player.playVideo();
+  }
+
   function hideMessageBox() {
     document.getElementById('messageBox').style.display = 'none';
-    player.playVideo(); // 메시지 박스를 닫으면 다시 재생
+    player.playVideo();
   }
 </script>
 
