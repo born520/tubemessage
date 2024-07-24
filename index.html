@@ -25,7 +25,7 @@
 <body>
 
 <div id="player"></div>
-<div id="messageBox">Video has ended!</div>
+<div id="messageBox" onclick="hideMessageBox()">Video has ended! Click to close this message.</div>
 
 <script src="https://www.youtube.com/iframe_api"></script>
 <script>
@@ -45,6 +45,10 @@
     if (event.data == YT.PlayerState.ENDED) {
       document.getElementById('messageBox').style.display = 'flex';
     }
+  }
+
+  function hideMessageBox() {
+    document.getElementById('messageBox').style.display = 'none';
   }
 </script>
 
