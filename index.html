@@ -7,7 +7,7 @@
   <style>
     #messageBox {
       display: none;
-      position: fixed;
+      position: absolute;
       top: 0;
       left: 0;
       width: 100%;
@@ -20,12 +20,20 @@
       align-items: center;
       z-index: 1000; /* ensure it appears above everything else */
     }
+    #playerContainer {
+      position: relative;
+      width: 640px;
+      height: 390px;
+      margin: auto;
+    }
   </style>
 </head>
 <body>
 
-<div id="player"></div>
-<div id="messageBox" onclick="hideMessageBox()">Video has ended! Click to close this message.</div>
+<div id="playerContainer">
+  <div id="player"></div>
+  <div id="messageBox" onclick="hideMessageBox()">Video has ended! Click to close this message.</div>
+</div>
 
 <script src="https://www.youtube.com/iframe_api"></script>
 <script>
@@ -44,11 +52,14 @@
   function onPlayerStateChange(event) {
     if (event.data == YT.PlayerState.ENDED) {
       document.getElementById('messageBox').style.display = 'flex';
+    } else if (event.data == YT.PlayerState.PLAYING) {
+      document.getElementById('messageBox').style.display = 'none';
     }
   }
 
   function hideMessageBox() {
     document.getElementById('messageBox').style.display = 'none';
+    player.playVideo(); // 메시지 박스를 닫으면 다시 재생
   }
 </script>
 
