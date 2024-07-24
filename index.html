@@ -128,14 +128,6 @@
   }
 
   window.onload = function() {
-    // 페이지가 로드될 때 캐시 무효화
-    if ('serviceWorker' in navigator) {
-      caches.keys().then(function(names) {
-        for (let name of names) {
-          caches.delete(name);
-        }
-      });
-    }
     restorePlayerState();
   }
 </script>
