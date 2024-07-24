@@ -66,7 +66,7 @@
 <script src="https://www.youtube.com/iframe_api"></script>
 <script>
   var player;
-  var isThumbnailVisible = true;  // 새로고침 시 썸네일 보이기 위한 변수
+  var isThumbnailVisible = true;
 
   function onYouTubeIframeAPIReady() {
     player = new YT.Player('player', {
@@ -81,21 +81,20 @@
   }
 
   function onPlayerReady(event) {
-    if (isThumbnailVisible) {
-      document.getElementById('thumbnail').style.display = 'flex';
-    } else {
-      document.getElementById('thumbnail').style.display = 'none';
-    }
-    document.getElementById('messageBox').style.display = 'none';
+    restorePlayerState();
   }
 
   function onPlayerStateChange(event) {
     if (event.data == YT.PlayerState.ENDED) {
       document.getElementById('messageBox').style.display = 'flex';
-      isThumbnailVisible = true;  // 영상이 끝나면 썸네일이 다시 보이도록 설정
+      isThumbnailVisible = true;
+      localStorage.setItem('videoState', 'ended');
     } else if (event.data == YT.PlayerState.PLAYING) {
       document.getElementById('messageBox').style.display = 'none';
       isThumbnailVisible = false;
+      localStorage.setItem('videoState', 'playing');
+    } else if (event.data == YT.PlayerState.PAUSED) {
+      localStorage.setItem('videoState', 'paused');
     }
   }
 
@@ -109,6 +108,23 @@
     document.getElementById('thumbnail').style.display = 'flex';
     player.seekTo(0);
     player.stopVideo();
+    localStorage.setItem('videoState', 'stopped');
+  }
+
+  function restorePlayerState() {
+    var videoState = localStorage.getItem('videoState');
+    if (videoState === 'playing') {
+      document.getElementById('thumbnail').style.display = 'none';
+      player.playVideo();
+    } else if (videoState === 'paused') {
+      document.getElementById('thumbnail').style.display = 'none';
+    } else if (videoState === 'ended') {
+      document.getElementById('messageBox').style.display = 'flex';
+      document.getElementById('thumbnail').style.display = 'flex';
+    } else {
+      document.getElementById('thumbnail').style.display = 'flex';
+      document.getElementById('messageBox').style.display = 'none';
+    }
   }
 
   window.onload = function() {
@@ -120,6 +136,7 @@
         }
       });
     }
+    restorePlayerState();
   }
 </script>
 
