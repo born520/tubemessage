@@ -10,7 +10,6 @@
       width: 640px;
       height: 390px;
       margin: auto;
-      cursor: pointer;
     }
     #thumbnail {
       position: absolute;
@@ -24,6 +23,7 @@
       justify-content: center;
       align-items: center;
       z-index: 1;
+      cursor: pointer;
     }
     #playButton {
       width: 100px;
@@ -46,6 +46,7 @@
       justify-content: center;
       align-items: center;
       z-index: 1000;
+      cursor: pointer;
     }
   </style>
 </head>
@@ -53,7 +54,7 @@
 
 <div id="playerContainer">
   <div id="player"></div>
-  <div id="thumbnail">
+  <div id="thumbnail" onclick="startVideo()">
     <div id="playButton"></div>
   </div>
   <div id="messageBox" onclick="resetPlayer()">Video has ended! Click to restart.</div>
@@ -99,8 +100,6 @@
     player.seekTo(0);
     player.stopVideo();
   }
-
-  document.getElementById('thumbnail').addEventListener('click', startVideo);
 </script>
 
 </body>
