@@ -68,19 +68,6 @@
   var player;
   var isThumbnailVisible = true;  // 새로고침 시 썸네일 보이기 위한 변수
 
-  // 캐시를 무효화하기 위한 함수
-  function clearCache() {
-    if ('serviceWorker' in navigator) {
-      caches.keys().then(function(names) {
-        for (let name of names) {
-          caches.delete(name);
-        }
-      });
-    }
-  }
-
-  clearCache();
-
   function onYouTubeIframeAPIReady() {
     player = new YT.Player('player', {
       height: '390',
@@ -122,6 +109,17 @@
     document.getElementById('thumbnail').style.display = 'flex';
     player.seekTo(0);
     player.stopVideo();
+  }
+
+  window.onload = function() {
+    // 페이지가 로드될 때 캐시 무효화
+    if ('serviceWorker' in navigator) {
+      caches.keys().then(function(names) {
+        for (let name of names) {
+          caches.delete(name);
+        }
+      });
+    }
   }
 </script>
 
