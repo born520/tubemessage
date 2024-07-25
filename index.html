@@ -67,6 +67,7 @@
 <script>
   var player;
   var isThumbnailVisible = true;
+  var checkInterval;
 
   function onYouTubeIframeAPIReady() {
     player = new YT.Player('player', {
@@ -85,16 +86,20 @@
   }
 
   function onPlayerStateChange(event) {
-    if (event.data == YT.PlayerState.ENDED) {
-      document.getElementById('messageBox').style.display = 'flex';
-      isThumbnailVisible = true;
-      localStorage.setItem('videoState', 'ended');
-    } else if (event.data == YT.PlayerState.PLAYING) {
+    if (event.data == YT.PlayerState.PLAYING) {
       document.getElementById('messageBox').style.display = 'none';
       isThumbnailVisible = false;
       localStorage.setItem('videoState', 'playing');
+      clearInterval(checkInterval);
+      checkInterval = setInterval(checkVideoTime, 500);
     } else if (event.data == YT.PlayerState.PAUSED) {
       localStorage.setItem('videoState', 'paused');
+      clearInterval(checkInterval);
+    } else if (event.data == YT.PlayerState.ENDED) {
+      document.getElementById('messageBox').style.display = 'flex';
+      isThumbnailVisible = true;
+      localStorage.setItem('videoState', 'ended');
+      clearInterval(checkInterval);
     }
   }
 
@@ -109,6 +114,16 @@
     player.seekTo(0);
     player.stopVideo();
     localStorage.setItem('videoState', 'stopped');
+  }
+
+  function checkVideoTime() {
+    var currentTime = player.getCurrentTime();
+    var duration = player.getDuration();
+    if (duration - currentTime <= 2) {
+      document.getElementById('messageBox').style.display = 'flex';
+    } else {
+      document.getElementById('messageBox').style.display = 'none';
+    }
   }
 
   function restorePlayerState() {
